@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Sision Junior School — Grade 6 CBC Results</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f0f4f8;min-height:100vh;}
+:root{
+  --ink:#1a2332;--paper:#fff;--line:#dde3ec;--accent:#1a56db;
+  --ee:#166534;--ee-bg:#dcfce7;--me:#1e40af;--me-bg:#dbeafe;
+  --ae:#92400e;--ae-bg:#fef3c7;--be:#991b1b;--be-bg:#fee2e2;
+}
+/* ── Setup ── */
+.setup{max-width:500px;margin:32px auto;padding:0 12px;}
+.setup-card{background:#fff;border-radius:14px;padding:28px;box-shadow:0 2px 20px rgba(0,0,0,.10);}
+.setup h1{font-size:1.3rem;font-weight:800;margin-bottom:4px;}
+.setup p{font-size:.85rem;color:#555;margin:6px 0 18px;}
+.steps{background:#f7f9ff;border-radius:8px;padding:14px 16px;margin-bottom:18px;font-size:.8rem;line-height:1.8;}
+.field label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#444;display:block;margin:12px 0 4px;}
+.field input{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font-size:.9rem;font-family:monospace;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.btn{width:100%;padding:12px;border:none;border-radius:8px;font-size:.95rem;font-weight:700;cursor:pointer;margin-top:12px;}
+.btn-primary{background:var(--accent);color:#fff;}
+.btn-success{background:#16a34a;color:#fff;}
+.btn-gray{background:#555;color:#fff;}
+.msg{font-size:.78rem;margin-top:8px;}
+.msg.ok{color:#16a34a;} .msg.err{color:#c0392b;}
+.share-box{background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:12px 14px;margin-top:16px;font-size:.82rem;}
+.share-box b{display:block;margin-bottom:4px;}
+.share-link{word-break:break-all;color:var(--accent);font-size:.75rem;margin:4px 0 8px;}
+/* ── App ── */
+.topbar{background:linear-gradient(135deg,#1a2e5a 0%,#1a56db 100%);color:#fff;padding:14px 18px 12px;}
+.school{font-size:1.05rem;font-weight:800;letter-spacing:.02em;}
+.sub{font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;opacity:.8;margin-bottom:2px;}
+.grade-badge{display:inline-block;background:rgba(255,255,255,.2);border-radius:20px;padding:2px 12px;font-size:.72rem;font-weight:700;margin-top:6px;}
+.db-btn{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.4);border-radius:20px;color:#fff;font-size:.7rem;padding:3px 10px;cursor:pointer;float:right;margin-top:4px;}
+main{max-width:680px;margin:0 auto;padding:14px 12px;}
+.card{background:#fff;border-radius:10px;border:1px solid var(--line);padding:16px;margin-bottom:12px;}
+.card h2{font-size:.95rem;font-weight:700;margin-bottom:12px;color:var(--ink);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+.form-row.three{grid-template-columns:1fr 1fr 1fr;}
+select,input[type=text],input[type=number]{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:7px;font-size:.88rem;}
+.stream-tabs{display:flex;gap:8px;margin-bottom:14px;}
+.stream-tab{flex:1;padding:9px;border:1px solid var(--line);border-radius:8px;background:#fff;font-size:.85rem;font-weight:600;cursor:pointer;text-align:center;}
+.stream-tab.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+/* ── Table ── */
+.tbl-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:.82rem;}
+th{background:#1a2e5a;color:#fff;padding:8px 6px;text-align:center;font-size:.72rem;white-space:nowrap;}
+th.name-th{text-align:left;}
+td{padding:7px 6px;text-align:center;border-bottom:1px solid var(--line);}
+td.name-td{text-align:left;font-weight:600;}
+td input[type=number]{width:56px;padding:5px 4px;text-align:center;font-weight:700;}
+tr:nth-child(even) td{background:#f8faff;}
+.rank-cell{font-weight:800;color:var(--accent);min-width:34px;}
+.grade-pill{display:inline-block;padding:2px 7px;border-radius:12px;font-size:.7rem;font-weight:700;}
+.EE{background:var(--ee-bg);color:var(--ee);}
+.ME{background:var(--me-bg);color:var(--me);}
+.AE{background:var(--ae-bg);color:var(--ae);}
+.BE{background:var(--be-bg);color:var(--be);}
+.total-cell{font-weight:800;font-size:.9rem;color:#1a2e5a;}
+.save-bar{position:sticky;bottom:0;background:var(--paper);border-top:1px solid var(--line);padding:10px 12px;display:flex;gap:8px;align-items:center;}
+.save-btn{flex:1;padding:11px;background:#16a34a;color:#fff;border:none;border-radius:8px;font-size:.92rem;font-weight:700;cursor:pointer;}
+.save-msg{font-size:.8rem;color:#16a34a;font-weight:600;}
+.save-err{font-size:.8rem;color:#c0392b;font-weight:600;}
+.key{display:flex;gap:8px;flex-wrap:wrap;font-size:.72rem;margin-bottom:14px;}
+.key-item{padding:3px 10px;border-radius:20px;font-weight:700;}
+/* ── Print ── */
+@media print{.no-print{display:none!important}.topbar{print-color-adjust:exact}table{font-size:.75rem}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+// ── CONFIG ────────────────────────────────────────────────────────────────────
+const SCHOOL = "SISION JUNIOR SCHOOL";
+const GRADE  = "6";
+const STREAM_DEFAULT = "East";
+const SUBJECTS = ["MATHS","ENGLISH","KISWAHILI","SCI/AGRIC","SOCIAL","CREATIVE"];
+const TERMS = ["Mid Term 1","End Term 1","Mid Term 2","End Term 2","Mid Term 3","End Term 3"];
+
+// Grading scale for primary (Grade 6)
+function getGrade(score){
+  const s = Number(score);
+  if(isNaN(s)||score===""||score===null) return null;
+  if(s>=76) return {lvl:"EE",label:"Exceeding Expectation"};
+  if(s>=51) return {lvl:"ME",label:"Meeting Expectation"};
+  if(s>=26) return {lvl:"AE",label:"Approaching Expectation"};
+  return {lvl:"BE",label:"Below Expectation"};
+}
+
+// ── INITIAL LEARNERS ──────────────────────────────────────────────────────────
+const INIT = {
+  East:[
+    "ANNE WANJIRU","LAZARUS NJOROGE","BLESSINGS WAMBUI","EVAN KIMANI",
+    "JAYVINE MWANGI","ASHLEY WAMBUI","MARYANNE WATIRI","JOHN NJOROGE",
+    "EUNICE WAMBUI","JOSEPH NDUNGU","JOHN KIMANI","ESTHER MUMBI",
+    "JOYLEEN NUTHONI","JOHN GITAU","SUSAN WARABAI","MITCHELLE WANJIKU",
+    "IMMANUEL EDVINE","BETHA NJERI","MICHEAL KIMANJUI","MARGARET NJOKI",
+    "JOSEPH MUCERU","SAMUEL NJUGUNA","MARGARET NJERI","RUTH WANJIRU",
+    "BLESS GITAU","JOSEPH WACIRA","JOHN MAINA","LUKE KIMUNYI",
+    "PETER NBUGUTA","RUTH RAUGURU","JOHN KINYANJUI","PAULINE NYANJOURA",
+    "CHARLEEN WANJIKU","JANE WANJIRU","BENSON NGUGI","ELIZABETH NJOKI",
+    "VICTOR NDUNGU","FRANCIS KAMAU","PETER NJUGUNA","JOSEPH KIHARA",
+    "DANIEL KANG'ETHE"
+  ],
+  West:[
+    "PRECIOUS WANGUI","IAN CHEGE","JOY WANGUI","CAROLINE MUMBI",
+    "VINCE KAMAU","STEPHEN NJOROGE","TABITHA MURINGI","MARY WANGUI",
+    "ALEX KOIGI","MARY NJERI","SAMUEL MWANGI","DANIEL MWANGI",
+    "ZIPPORAH WANJIRU","TERRY NDUTA","SAMUEL CHACHA","PETER KIMANI",
+    "HILDAH WAITHIRA","PAUL KIMANI","ELVIS KINYANJUI","FAITH WANGUI",
+    "MERCY NJERI","SAMUEL MUTURI","SUSAN NGIMBI","VICTOR KABERI",
+    "MITCHELL WANJIKU","MARY WAITHONI","JAMES BIARU","JOHN CHEGE",
+    "GRACE WAITHIRA","PAUL KAMAU","JOSEPH MBUGUA","NANCY MWIRAKI",
+    "ARMSTRONG MUNYU","STEPHEN GITHAIGA","PAUL KAGURU","NATHANIEL KIMUTHU",
+    "STEPHEN NDUNGU","GLADYS WAMBUI","VINCENT MAINIS","ROSE WAMBUI",
+    "BRIAN NDIRANGU","DAVID MACHARIA","BRIAN GICHEHE","MARY NYAMBURA"
+  ]
+};
+
+// ── GITHUB STORAGE ────────────────────────────────────────────────────────────
+function resolveGH(){
+  try{const p=new URLSearchParams(window.location.search);const t=p.get("t"),o=p.get("o"),r=p.get("r");if(t&&o&&r){const c={token:t,owner:o,repo:r};localStorage.setItem("sision_g6_gh",JSON.stringify(c));return c;}}catch{}
+  try{const s=localStorage.getItem("sision_g6_gh");if(s)return JSON.parse(s);}catch{}
+  return null;
+}
+let GH = resolveGH();
+let DB = null, DB_SHA = null;
+
+function ghH(){return{Authorization:`token ${GH.token}`,Accept:"application/vnd.github.v3+json","Content-Type":"application/json"};}
+function dbUrl(){return `https://api.github.com/repos/${GH.owner}/${GH.repo}/contents/db6.json`;}
+
+async function loadDB(force){
+  if(DB&&!force)return DB;
+  if(!GH)return{};
+  try{
+    const res=await fetch(dbUrl(),{headers:ghH()});
+    if(res.status===404){DB={};DB_SHA=null;return{};}
+    if(!res.ok)return DB||{};
+    const j=await res.json();
+    DB_SHA=j.sha;
+    DB=JSON.parse(decodeURIComponent(escape(atob(j.content.replace(/\n/g,"")))));
+    return DB;
+  }catch{return DB||{};}
+}
+async function saveDB(db,retries){
+  if(!GH)return false;
+  retries=retries===undefined?2:retries;
+  try{
+    const content=btoa(unescape(encodeURIComponent(JSON.stringify(db))));
+    const body={message:"Update Grade 6 marks",content,branch:"main"};
+    if(DB_SHA)body.sha=DB_SHA;
+    const res=await fetch(dbUrl(),{method:"PUT",headers:ghH(),body:JSON.stringify(body)});
+    if(res.status===409&&retries>0){await loadDB(true);Object.assign(DB,db);return await saveDB(DB,retries-1);}
+    if(!res.ok)return false;
+    const j=await res.json();DB_SHA=j.content.sha;DB=db;return true;
+  }catch{return false;}
+}
+function storageKey(stream,term,year){return `g6_${stream}_${term.replace(/ /g,"_")}_${year}`;}
+
+// ── APP STATE ─────────────────────────────────────────────────────────────────
+let state = {
+  view: GH?"app":"setup",
+  stream: STREAM_DEFAULT,
+  term: "Mid Term 2",
+  year: "2026",
+  scores: {East:{}, West:{}}, // {name:{subj:value}}
+  saving: false,
+  saveMsg: "",
+  saveErr: "",
+  loadingData: false,
+  setupStatus: "",
+  setupUrl: "", setupOwner: "maker-koech", setupRepo: "",
+};
+
+function calcTotal(scoreMap){
+  return SUBJECTS.reduce((s,sub)=>{
+    const v=Number(scoreMap[sub]);
+    return s+(isNaN(v)?0:v);
+  },0);
+}
+
+function rankLearners(names, scoresByName){
+  const rows = names.map(name=>{
+    const sc = scoresByName[name]||{};
+    const total = calcTotal(sc);
+    return {name, sc, total};
+  });
+  rows.sort((a,b)=>b.total-a.total);
+  rows.forEach((r,i)=>r.rank=r.total>0?i+1:"–");
+  return rows;
+}
+
+// ── RENDER ────────────────────────────────────────────────────────────────────
+function render(){
+  const root = document.getElementById("root");
+  if(state.view==="setup"){ root.innerHTML = renderSetup(); bindSetup(); return; }
+  root.innerHTML = renderApp();
+  bindApp();
+}
+
+function renderSetup(){
+  const gh = GH;
+  const teacherLink = gh
+    ? `${location.origin}${location.pathname}?t=${gh.token}&o=${gh.owner}&r=${gh.repo}`
+    : "";
+  return `
+  <div class="setup">
+    <div class="setup-card">
+      <h1>🔗 Connect to GitHub</h1>
+      <p>All marks are saved to your GitHub repo — shared live across all teachers.</p>
+      ${gh?`
+      <div class="share-box">
+        <b>✅ Already connected: ${gh.owner}/${gh.repo}</b>
+        <div>Teacher link (send via WhatsApp):</div>
+        <div class="share-link">${teacherLink}</div>
+        <button class="btn btn-success" onclick="navigator.clipboard?.writeText('${teacherLink}');alert('Copied!')">📋 Copy Teacher Link</button>
+        <button class="btn btn-gray" style="margin-top:6px" onclick="state.view='app';loadAndRender()">Open App</button>
+      </div>`:""}
+      <div class="steps">
+        <b>Get GitHub Token (2 min):</b><br>
+        1. github.com → profile photo → <b>Settings</b><br>
+        2. Scroll to bottom → <b>Developer settings</b><br>
+        3. <b>Personal access tokens → Tokens (classic)</b><br>
+        4. <b>Generate new token</b> → name it <i>Sision Marks</i><br>
+        5. Expiration: <b>No expiration</b> | tick ✅ <b>public_repo</b><br>
+        6. <b>Generate token</b> → copy it (starts <i>ghp_</i>)
+      </div>
+      <div class="field"><label>GitHub Token</label>
+        <input id="s_token" placeholder="ghp_xxxxxxxxxxxx" value="${state.setupUrl}">
+      </div>
+      <div class="row2">
+        <div class="field"><label>Username</label><input id="s_owner" value="${state.setupOwner}"></div>
+        <div class="field"><label>Repo Name</label><input id="s_repo" value="${state.setupRepo}" placeholder="Sision-grade6"></div>
+      </div>
+      <div class="msg ${state.setupStatus==="ok"?"ok":"err"}">${
+        state.setupStatus==="ok"?"✅ Connected! Opening app…":
+        state.setupStatus==="badtoken"?"❌ Token invalid. Check step 6.":
+        state.setupStatus==="fail"?"❌ Could not reach repo. Check username/repo.":
+        state.setupStatus==="testing"?"⏳ Testing connection…":""
+      }</div>
+      <button class="btn btn-primary" id="connectBtn">${state.setupStatus==="testing"?"Connecting…":"Connect & Open App"}</button>
+    </div>
+  </div>`;
+}
+
+function bindSetup(){
+  document.getElementById("connectBtn").onclick = async()=>{
+    const t=document.getElementById("s_token").value.trim();
+    const o=document.getElementById("s_owner").value.trim();
+    const r=document.getElementById("s_repo").value.trim();
+    if(!t||!o||!r)return;
+    state.setupStatus="testing"; render();
+    try{
+      const res=await fetch(`https://api.github.com/repos/${o}/${r}`,{headers:{Authorization:`token ${t}`,Accept:"application/vnd.github.v3+json"}});
+      if(res.status===401||res.status===403){state.setupStatus="badtoken";render();return;}
+      if(!res.ok){state.setupStatus="fail";render();return;}
+      GH={token:t,owner:o,repo:r};
+      localStorage.setItem("sision_g6_gh",JSON.stringify(GH));
+      DB=null;DB_SHA=null;
+      state.setupStatus="ok";render();
+      setTimeout(()=>{state.view="app";loadAndRender();},700);
+    }catch{state.setupStatus="fail";render();}
+  };
+}
+
+function renderApp(){
+  const names = INIT[state.stream]||[];
+  const scoresByName = state.scores[state.stream]||{};
+  const ranked = rankLearners(names, scoresByName);
+  const combinedNames = [...INIT.East,...INIT.West];
+  const combinedScores = {...(state.scores.East||{}), ...(state.scores.West||{})};
+  const combinedRanked = rankLearners(combinedNames, combinedScores);
+  const combinedTotal = combinedNames.length;
+
+  function subjectRank(name, subj){
+    const sorted=[...combinedNames]
+      .map(n=>({n,v:Number((combinedScores[n]||{})[subj]||0)}))
+      .filter(x=>x.v>0)
+      .sort((a,b)=>b.v-a.v);
+    const idx=sorted.findIndex(x=>x.n===name);
+    return idx>=0?`${idx+1}/${combinedTotal}`:"–";
+  }
+
+  return `
+  <div class="topbar">
+    <button class="db-btn no-print" onclick="state.view='setup';render()">⚙ DB / Teacher Link</button>
+    <div class="sub">${SCHOOL}</div>
+    <div class="school">Grade ${GRADE} CBC Results System</div>
+    <span class="grade-badge">End Term 2, ${state.year}</span>
+  </div>
+  <main>
+    <!-- Controls -->
+    <div class="card no-print">
+      <div class="form-row three">
+        <div class="field" style="margin:0"><label>Term</label>
+          <select id="termSel" onchange="state.term=this.value;loadAndRender()">
+            ${TERMS.map(t=>`<option${t===state.term?" selected":""}>${t}</option>`).join("")}
+          </select>
+        </div>
+        <div class="field" style="margin:0"><label>Year</label>
+          <select id="yearSel" onchange="state.year=this.value;loadAndRender()">
+            ${["2024","2025","2026","2027","2028"].map(y=>`<option${y===state.year?" selected":""}>${y}</option>`).join("")}
+          </select>
+        </div>
+        <div class="field" style="margin:0"><label>Class</label>
+          <div class="stream-tabs">
+            <button class="stream-tab${state.stream==="East"?" active":""}" onclick="switchStream('East')">East</button>
+            <button class="stream-tab${state.stream==="West"?" active":""}" onclick="switchStream('West')">West</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grading key -->
+    <div class="key no-print">
+      <span class="key-item EE">EE: 76–100</span>
+      <span class="key-item ME">ME: 51–75</span>
+      <span class="key-item AE">AE: 26–50</span>
+      <span class="key-item BE">BE: 0–25</span>
+      <span style="font-size:.72rem;color:#555;align-self:center">Grade Rank = position in both streams combined (${combinedTotal} learners)</span>
+    </div>
+
+    ${state.loadingData?`<div class="card" style="text-align:center;padding:30px;color:#888">Loading…</div>`:`
+    <!-- Marks table -->
+    <div class="card" style="padding:10px">
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th class="name-th">NAME</th>
+              ${SUBJECTS.map(s=>`<th>${s}</th><th>GR</th>`).join("")}
+              <th>TOTAL</th>
+              <th>OVERALL</th>
+              <th>RANK</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${ranked.map((row,i)=>{
+              const rowScores = row.sc;
+              const total = row.total;
+              const overallGrade = total>0?getGrade(total/SUBJECTS.length):null;
+              return `<tr>
+                <td class="rank-cell">${row.rank}</td>
+                <td class="name-td">${row.name}</td>
+                ${SUBJECTS.map(sub=>{
+                  const v=rowScores[sub]!==undefined?rowScores[sub]:"";
+                  const g=v!==""?getGrade(v):null;
+                  return `<td><input type="number" min="0" max="100" value="${v}" data-name="${encodeURIComponent(row.name)}" data-sub="${sub}" class="score-input"></td>
+                  <td>${g?`<span class="grade-pill ${g.lvl}">${g.lvl}</span>`:"–"}</td>`;
+                }).join("")}
+                <td class="total-cell">${total>0?total:"–"}</td>
+                <td>${overallGrade?`<span class="grade-pill ${overallGrade.lvl}">${overallGrade.lvl}</span>`:"–"}</td>
+                <td class="rank-cell">${subjectRank?.(row.name,"MATHS")??"–"}</td>
+              </tr>`;
+            }).join("")}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    `}
+
+    <div class="save-bar no-print">
+      <button class="save-btn" id="saveBtn" onclick="saveMarks()">${state.saving?"Saving…":"💾 Save All Marks"}</button>
+      ${state.saveMsg?`<span class="save-msg">${state.saveMsg}</span>`:""}
+      ${state.saveErr?`<span class="save-err">${state.saveErr}</span>`:""}
+    </div>
+  </main>`;
+}
+
+function bindApp(){
+  document.querySelectorAll(".score-input").forEach(inp=>{
+    inp.oninput=()=>{
+      const name=decodeURIComponent(inp.dataset.name);
+      const sub=inp.dataset.sub;
+      const val=inp.value.trim();
+      if(!state.scores[state.stream])state.scores[state.stream]={};
+      if(!state.scores[state.stream][name])state.scores[state.stream][name]={};
+      state.scores[state.stream][name][sub]=val===""?"":Number(val);
+      // Re-rank without full re-render for speed
+      updateRanks();
+    };
+  });
+}
+
+function updateRanks(){
+  // Lightweight rank update without full re-render
+  const names=INIT[state.stream]||[];
+  const scoresByName=state.scores[state.stream]||{};
+  const ranked=rankLearners(names,scoresByName);
+  ranked.forEach(row=>{
+    // Update rank cells and totals — find by position
+  });
+  // For simplicity just re-render (fast enough for 44 rows)
+  render();
+}
+
+function switchStream(s){
+  state.stream=s;
+  loadAndRender();
+}
+
+async function loadAndRender(){
+  if(!GH){render();return;}
+  state.loadingData=true;
+  render();
+  try{
+    const db=await loadDB();
+    ["East","West"].forEach(str=>{
+      const key=storageKey(str,state.term,state.year);
+      const saved=db[key];
+      if(saved){state.scores[str]=saved;}
+      else{
+        // Initialize blank from INIT names
+        const blank={};
+        INIT[str].forEach(n=>{blank[n]={};});
+        state.scores[str]=blank;
+      }
+    });
+  }catch(e){console.error(e);}
+  state.loadingData=false;
+  render();
+}
+
+async function saveMarks(){
+  if(!GH){alert("Connect to GitHub first.");return;}
+  state.saving=true;state.saveMsg="";state.saveErr="";render();
+  try{
+    const db=await loadDB();
+    const key=storageKey(state.stream,state.term,state.year);
+    db[key]=state.scores[state.stream];
+    const ok=await saveDB(db);
+    state.saving=false;
+    if(ok){state.saveMsg="✅ Saved!";setTimeout(()=>{state.saveMsg="";render();},3000);}
+    else state.saveErr="❌ Save failed — check connection and try again.";
+  }catch(e){state.saving=false;state.saveErr="❌ Error: "+e.message;}
+  render();
+}
+
+// ── INIT ─────────────────────────────────────────────────────────────────────
+if(GH){
+  state.view="app";
+  loadAndRender();
+}else{
+  render();
+}
+</script>
+</body>
+</html>
